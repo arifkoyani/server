@@ -4,12 +4,13 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, description, content, thumbnailUrl, graphicUrl } = body;
+    const { title, slug, description, content, thumbnailUrl, graphicUrl } = body;
 
     const { data, error } = await supabase
       .from("articles")
       .insert({
         title,
+        slug,
         description,
         content,
         thumbnail: thumbnailUrl,

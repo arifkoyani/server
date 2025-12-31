@@ -4,6 +4,7 @@ import { Upload, Image as ImageIcon, FileText, Loader2, CheckCircle2, XCircle, S
 
 export default function CreateArticle() {
   const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
@@ -61,7 +62,7 @@ export default function CreateArticle() {
   };
 
   const handleSubmit = async () => {
-    if (!title || !description || !content) {
+    if (!title || !description || !content || !slug) {
       setMessage("Please fill in all required fields");
       return;
     }
@@ -73,7 +74,7 @@ export default function CreateArticle() {
       const res = await fetch("/api/createArticles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description, content, thumbnailUrl, graphicUrl })
+        body: JSON.stringify({ title, slug, description, content, thumbnailUrl, graphicUrl })
       });
 
       const data = await res.json();
@@ -82,6 +83,7 @@ export default function CreateArticle() {
         setMessage("Article added successfully!");
         // Reset form
         setTitle("");
+        setSlug("");
         setDescription("");
         setContent("");
         setThumbnailUrl("");
@@ -116,6 +118,27 @@ export default function CreateArticle() {
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400"
           />
+        </div>
+
+        {/* Slug */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Slug <span className="text-red-500">*</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(URL-friendly identifier)</span>
+          </label>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400">/</span>
+            <input
+              type="text"
+              placeholder="Enter article slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400"
+            />
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Enter a unique slug for this article (e.g., "my-article-title")
+          </p>
         </div>
 
         {/* Description */}

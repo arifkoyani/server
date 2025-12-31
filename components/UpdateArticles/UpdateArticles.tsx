@@ -96,7 +96,7 @@ export default function UpdateArticles() {
 
   // update article
   const updateArticle = async () => {
-    if (!form.title || !form.description || !form.content) {
+    if (!form.title || !form.slug || !form.description || !form.content) {
       setMessage("Please fill in all required fields");
       return;
     }
@@ -111,6 +111,7 @@ export default function UpdateArticles() {
         body: JSON.stringify({
           id: form.id,
           title: form.title,
+          slug: form.slug,
           description: form.description,
           content: form.content,
           thumbnail: form.thumbnail || "",
@@ -141,6 +142,7 @@ export default function UpdateArticles() {
     setForm({
       id: article.id,
       title: article.title || "",
+      slug: article.slug || "",
       description: article.description || "",
       content: article.content || "",
       thumbnail: article.thumbnail || "",
@@ -225,6 +227,27 @@ export default function UpdateArticles() {
                       onChange={e => setForm({ ...form, title: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
+                  </div>
+
+                  {/* Slug */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Slug <span className="text-red-500">*</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">(URL-friendly identifier)</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">/</span>
+                      <input
+                        type="text"
+                        placeholder="Enter article slug"
+                        value={form.slug || ""}
+                        onChange={e => setForm({ ...form, slug: e.target.value })}
+                        className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Enter a unique slug for this article (e.g., "my-article-title")
+                    </p>
                   </div>
 
                   {/* Description */}
@@ -357,7 +380,7 @@ export default function UpdateArticles() {
                   <div className="flex gap-3 pt-4">
                     <button
                       onClick={updateArticle}
-                      disabled={loading || !form.title || !form.description || !form.content}
+                      disabled={loading || !form.title || !form.slug || !form.description || !form.content}
                       className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
                       {loading ? (
